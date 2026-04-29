@@ -1,0 +1,29 @@
+*{padding:0;margin:0; border:0}
+@charset "utf-8";
+body{background:#fff; margin:0px; padding:0px; text-align:center; font:12px Arial, Helvetica, sans-serif}
+h1,h2,strong{text-transform:uppercase; padding-bottom:0.5em;  font-size:18px;text-decoration:underline overline;}
+h2{color: #333399;  padding-bottom:0.2em; font-size:14px}
+.BRAND1{float:right; width:25%;}
+.BRAND2{float:left; width:25%;}
+.PINBRAND{position:relative; margin:1px auto 0px auto; width:760px; text-align:left; background:#fff; } 
+p{line-height:20px;text-indent:2em;padding-bottom:1em}
+.NEEDLES{width:100px; float: right;}
+.NEEDLES ul{list-style-type:none; margin:0px; padding:0px}
+.NEEDLES li{ border-bottom:1px solid #b9ff00;}
+.NEEDLES li a{display:block; padding:5px 5px 0 0.5em; text-decoration:none;border-left:1px solid #3c5300;  border-right:1px solid #3c5300; border-right:1px solid #3c5300;}
+.NEEDLES li a:link, .NEEDLES li a:visited{background-color:#3366FF; color:#fff}
+.NEEDLES li a:hover{background-color:red; color:#ffff00;border-left:12px solid yellow;}
+.needle{ float:left; width:587px; margin:10px 15px 35px 15px; padding-left:14px;background-color:#fff}
+.BEARING{clear:both; text-align:center; background-color:#99FFFF; margin:0px; padding:1px}
+.BEARING a:link, .BEARING a:visited{color:#475300; text-decoration:none}
+.BEARING a:hover{color:#000; text-decoration:line-through}
+#PIN{text-transform:capitalize;word-spacing:10px;letter-spacing:-1px;line-height:2; background:#678;color:white;text-transform:uppercase;}
+#need{border: 1px #333 solid;font: 10px arial;width:500px}
+.datalist{border:1px solid #007108; font-family:Arial; border-collapse:collapse; background-color:#99ccff; font-size:14px;} 
+.datalist th{border:1px solid #007108; background-color:#333366; color:#FFF; font-weight:bold;padding-top:4px; padding-bottom:4px; padding-left:12px; padding-right:12px; text-align:center;} 
+.datalist td{ border:1px solid #007108; text-align:left; padding-top:4px; padding-bottom:4px; 
+padding-left:10px; padding-right:10px; } 
+.datalist tr.altrow{background-color:#ccc;} 
+address{padding-top:40px}
+.contact{padding-left:10px}
+table caption {font-size: 20px; line-height:20px; color:white; background-color:#777;}
