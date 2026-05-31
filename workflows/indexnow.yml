@@ -1,0 +1,15 @@
+name: Notify IndexNow on push
+
+on:
+  push:
+    branches: [ main ]          # 你的默认分支
+
+jobs:
+  submit-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit sitemap URL to IndexNow
+        env:
+          INDEXNOW_KEY: "7ea56ba2db814750bc8d5f99dd2ad04e"   # 改为你自己的密钥
+        run: |
+          curl "https://api.indexnow.org/indexnow?url=https://facedriverpins.github.io/sitemap.xml&key=${INDEXNOW_KEY}"
