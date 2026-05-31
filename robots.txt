@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://facedriverpins.github.io/sitemap.xml
