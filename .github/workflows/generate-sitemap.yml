@@ -33,8 +33,9 @@ urls = []
 for root, dirs, files in os.walk('.'):
     dirs[:] = [d for d in dirs if not d.startswith('.')]
     for file in files:
-        if file.endswith('.html'):
-            rel_path = os.path.join(root, file).lstrip('./')
+    if file.endswith('.html') or file.endswith('.htm'):
+        
+           rel_path = os.path.join(root, file).lstrip('./')
             rel_path = rel_path.replace('\\', '/')
             # URL encode the path
             encoded_path = '/'.join(quote(part, safe='') for part in rel_path.split('/'))
