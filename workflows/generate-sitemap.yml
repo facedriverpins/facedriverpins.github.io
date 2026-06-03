@@ -1,0 +1,66 @@
+name: Generate Sitemap
+
+on:
+  push:
+    branches: [ main ]          # 当推送到 main 分支时触发
+  workflow_dispatch:            # 也支持手动触发（Actions 页面点按钮）
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write           # 允许自动提交回仓库
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate sitemap.xml
+        run: |
+          python -c "
+import os
+import xml.sax.saxutils as saxutils
+
+base_url = 'https://facedriverpins.github.io'
+urls = []
+
+# 递归扫描所有 .html 文件（包括子目录）
+for root, dirs, files in os.walk('.'):
+    # 忽略隐藏目录（如 .git、.github、.jekyll-cache 等）
+    dirs[:] = [d for d in dirs if not d.startswith('.')]
+    for file in files:
+        if file.endswith('.html'):
+            # 获取相对路径，并转换为 URL 路径
+            rel_path = os.path.join(root, file).lstrip('./')
+            # 确保 Windows 反斜杠转为正斜杠
+            rel_path = rel_path.replace('\\', '/')
+            url = f'{base_url}/{rel_path}'
+            urls.append(url)
+
+# 生成 XML 内容
+sitemap = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+'''
+for url in sorted(urls):
+    sitemap += f'''  <url>
+    <loc>{saxutils.escape(url)}</loc>
+  </url>
+'''
+sitemap += '</urlset>'
+
+with open('sitemap.xml', 'w', encoding='utf-8') as f:
+    f.write(sitemap)
+
+print(f'✅ Generated sitemap.xml with {len(urls)} URLs')
+"
+
+      - name: Commit and push if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-generate sitemap"
+          file_pattern: sitemap.xml
