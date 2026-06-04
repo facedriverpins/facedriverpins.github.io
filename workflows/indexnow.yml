@@ -1,15 +1,39 @@
-name: Notify IndexNow on push
+name: "Generate sitemap and submit to IndexNow"
 
 on:
   push:
-    branches: [ main ]          # 你的默认分支
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  submit-sitemap:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Submit sitemap URL to IndexNow
-        env:
-          INDEXNOW_KEY: "7ea56ba2db814750bc8d5f99dd2ad04e"   # 改为你自己的密钥
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate sitemap.xml
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: "https://facedriverpins.github.io/"
+          path-to-root: "."
+          # 同时包含 .html, .htm, .jpg 文件
+          include-patterns: "**/*.html, **/*.htm, **/*.jpg"
+          # 仅排除密钥txt、css、js、json等（不再排除jpg）
+          exclude-patterns: "**/*.txt, **/*.css, **/*.js, **/*.json"
+
+      - name: Commit and push sitemap.xml
         run: |
-          curl "https://api.indexnow.org/indexnow?url=https://facedriverpins.github.io/sitemap.xml&key=${INDEXNOW_KEY}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          git diff --cached --quiet || git commit -m "Auto update sitemap.xml (including jpg)"
+          git push
+
+      - name: Submit sitemap to IndexNow
+        uses: jakob-bagterp/index-now-submit-sitemap-action@v1
+        with:
+          host: "facedriverpins.github.io"
+          api_key: ${{ secrets.INDEXNOW_KEY }}
+          api_key_location: "https://facedriverpins.github.io/${{ secrets.INDEXNOW_KEY }}.txt"
+          sitemap_locations: "https://facedriverpins.github.io/sitemap.xml"
