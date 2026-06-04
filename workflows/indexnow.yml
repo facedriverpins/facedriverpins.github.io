@@ -17,18 +17,20 @@ jobs:
         with:
           base-url-path: "https://facedriverpins.github.io/"
           path-to-root: "."
-          # 同时包含 .html, .htm, .jpg 文件
-          include-patterns: "**/*.html, **/*.htm, **/*.jpg"
-          # 仅排除密钥txt、css、js、json等（不再排除jpg）
+          
+          include-patterns: "**/*.html, **/*.htm"
+          
           exclude-patterns: "**/*.txt, **/*.css, **/*.js, **/*.json"
 
       - name: Commit and push sitemap.xml
+        env:
+          MY_GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git diff --cached --quiet || git commit -m "Auto update sitemap.xml (including jpg)"
-          git push
+          git diff --cached --quiet || git commit -m "Auto update sitemap.xml"
+          git push https://facedriverpins:$MY_GITHUB_TOKEN@github.com/facedriverpins/facedriverpins.github.io.git HEAD:main
 
       - name: Submit sitemap to IndexNow
         uses: jakob-bagterp/index-now-submit-sitemap-action@v1
