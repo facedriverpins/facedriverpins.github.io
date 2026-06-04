@@ -18,7 +18,6 @@ jobs:
           base-url-path: "https://facedriverpins.github.io/"
           path-to-root: "."
           include-patterns: "**/*.html, **/*.htm"
-          include-patterns: "**/*.htm"
           exclude-patterns: "**/*.txt"
 
       - name: Commit and push sitemap.xml
