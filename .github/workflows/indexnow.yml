@@ -1,9 +1,9 @@
-name: Notify IndexNow on push
+name: "Generate sitemap and submit to IndexNow"
 
 on:
   push:
     branches: [ main ]          # 你的默认分支
-
+workflow_dispatch:       # 此事件允许你手动触发工作流
 jobs:
   submit-sitemap:
     runs-on: ubuntu-latest
