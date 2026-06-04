@@ -1,44 +1,38 @@
-name: "Generate sitemap and submit to IndexNow" # 工作流的名称，可以自定义
+name: Generate sitemap and submit to IndexNow
 
 on:
   push:
-    branches: [ main ] # 你可以根据需要修改为你的默认分支名
-workflow_dispatch:        # 允许手动触发
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   generate-and-submit:
     runs-on: ubuntu-latest
     steps:
-      # 1. 拉取代码仓库
-      - name: Checkout the repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 2. 自动生成 sitemap.xml
-      - name: SC sitemap
+      - name: Generate sitemap.xml
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: "https://facedriverpins.github.io/" # 将此替换为你的网站域名
-          path-to-root: "."           # 你的所有 htm 文件就在仓库根目录
- # 同时包含 .html, .htm, .jpg 文件
-          include-patterns: "**/*.html, **/*.htm, **/*.jpg"
-          
-      # 3. 提交新生成的 sitemap 文件到仓库
-      - name: Commit and push sitemap change
-        run: |
-          if [[ `git status --porcelain sitemap.xml` ]]; then
-            git config --global user.name 'github-actions[bot]'
-            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-            git add sitemap.xml
-            git commit -m "Automated sitemap update"
-            git push
-      
+          base-url-path: "https://facedriverpins.github.io/"
+          path-to-root: "."
+          include-patterns: "**/*.html, **/*.htm"
+          include-patterns: "**/*.htm"
+          exclude-patterns: "**/*.txt"
 
-     # 4. 提交 sitemap 到 IndexNow 搜索引擎
-      - name: Submit sitemap URLs to IndexNow
+      - name: Commit and push sitemap.xml
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          git diff --cached --quiet || git commit -m "Auto update sitemap.xml"
+          git push
+
+      - name: Submit sitemap to IndexNow
         uses: jakob-bagterp/index-now-submit-sitemap-action@v1
         with:
-          host: "facedriverpins.github.io" # 你的网站域名，不包含https://
+          host: "facedriverpins.github.io"
           api_key: ${{ secrets.INDEXNOW_KEY }}
           api_key_location: "https://facedriverpins.github.io/${{ secrets.INDEXNOW_KEY }}.txt"
           sitemap_locations: "https://facedriverpins.github.io/sitemap.xml"
-          # endpoint: "bing" # 可选项，默认是bing，也可选 yandex 等[reference:11]
